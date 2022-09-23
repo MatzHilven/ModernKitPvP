@@ -1,0 +1,25 @@
+invalid-permission: "&cYou don't have permission to execute this command!"
+invalid-sender: "&cYou cannot execute this command!"
+invalid-target: "&cThe specified target is invalid!"
+invalid-number: "&cThe specified number is invalid!"
+insufficient-funds: "&cYou don't have enough coins to purchase this!"
+
+# Command Usages
+usage: "&aModernKitPvP Usage"
+
+# Map
+invalid-map: "&cCannot find a map with specified id!"
+existing-map: "&cThere already exists a map with this id!"
+created-map: "&aSuccessfully created map `%id%`."
+set-name: "&aSuccessfully set the name of `%id%` to %name%."
+set-spawn: "&aSuccessfully set the spawn of `%id%` to your location."
+set-region: "&aSuccessfully set a corner of `%id%`'s region to your location."
+
+# Kit
+existing-kit: "&cThere already exists a kit with this id!"
+created-kit: "&aSuccessfully created kit `%id%`."
+reloaded-kits: "&aSuccessfully reloaded all the kits!"
+invalid-kit-permissions: "&cYou haven't unlocked this kit yet!"
+selected-kit: "&aSuccessfully selected `%kit%&a`."
+already-unlocked: "&cYou've already unlocked this kit."
+unlocked-kit: "&aSuccessfully bought %kit% &r&afor $%price%."
