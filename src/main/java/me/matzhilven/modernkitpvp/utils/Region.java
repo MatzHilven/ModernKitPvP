@@ -34,6 +34,10 @@ public class Region {
         return contains(position.getBlockX(), position.getBlockY(), position.getBlockZ());
     }
 
+    public boolean contains(Location position) {
+        return contains(position.getBlockX(), position.getBlockY(), position.getBlockZ());
+    }
+
     public int getMinX() {
         return Math.min(corner1.getBlockX(), corner2.getBlockX());
     }

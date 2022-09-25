@@ -2,11 +2,9 @@ package me.matzhilven.modernkitpvp.commands;
 
 import me.matzhilven.modernkitpvp.ModernKitPvP;
 import me.matzhilven.modernkitpvp.commands.subcommands.kit.AddKitCommand;
+import me.matzhilven.modernkitpvp.commands.subcommands.kit.KitsMenuCommand;
 import me.matzhilven.modernkitpvp.commands.subcommands.kit.ReloadKitsCommand;
-import me.matzhilven.modernkitpvp.commands.subcommands.map.CreateMapCommand;
-import me.matzhilven.modernkitpvp.commands.subcommands.map.SetMapNameCommand;
-import me.matzhilven.modernkitpvp.commands.subcommands.map.SetMapRegionCommand;
-import me.matzhilven.modernkitpvp.commands.subcommands.map.SetMapSpawnCommand;
+import me.matzhilven.modernkitpvp.commands.subcommands.map.*;
 import me.matzhilven.modernkitpvp.utils.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -37,10 +35,12 @@ public class ModernKitPvPBaseCommand implements CommandExecutor, TabExecutor {
         registerSubCommand(new SetMapNameCommand(main));
         registerSubCommand(new SetMapSpawnCommand(main));
         registerSubCommand(new SetMapRegionCommand(main));
+        registerSubCommand(new SetSpawnRegionCommand(main));
 
         // Kit
         registerSubCommand(new AddKitCommand(main));
         registerSubCommand(new ReloadKitsCommand(main));
+        registerSubCommand(new KitsMenuCommand(main));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ModernKitPvPBaseCommand implements CommandExecutor, TabExecutor {
             StringUtils.sendMessage(sender, main.getMessagesConfig().getString("usage"));
 
             subCommands.values().forEach(subCommand -> {
-                StringUtils.sendMessage(sender, " -/ModernKitPvP " + subCommand.getName() + " " + subCommand.getUsage());
+                StringUtils.sendMessage(sender, " -/kitpvp " + subCommand.getName() + " " + subCommand.getUsage());
             });
 
             return true;
@@ -61,7 +61,7 @@ public class ModernKitPvPBaseCommand implements CommandExecutor, TabExecutor {
             StringUtils.sendMessage(sender, main.getMessagesConfig().getString("usage"));
 
             subCommands.values().forEach(subCommand -> {
-                StringUtils.sendMessage(sender, " -/ModernKitPvP " + subCommand.getName() + " " + subCommand.getUsage());
+                StringUtils.sendMessage(sender, " -/kitpvp " + subCommand.getName() + " " + subCommand.getUsage());
             });
 
             return true;
@@ -77,7 +77,7 @@ public class ModernKitPvPBaseCommand implements CommandExecutor, TabExecutor {
             }
 
             if (subCommand.getArgumentSize() != 0 && args.length - 1 != subCommand.getArgumentSize()) {
-                StringUtils.sendMessage(sender, "&cUsage: /ModernKitPvP " + subCommand.getName() + " " + subCommand.getUsage());
+                StringUtils.sendMessage(sender, "&cUsage: /kitpvp " + subCommand.getName() + " " + subCommand.getUsage());
                 return true;
             }
 

@@ -1,16 +1,12 @@
 package me.matzhilven.modernkitpvp.utils;
 
-import me.matzhilven.ModernKitPvP.kit.KitEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class ConfigUtils {
 
@@ -91,34 +87,6 @@ public class ConfigUtils {
         }
 
         return inventoryContents;
-    }
-
-    public static void savePotionEffects(ConfigurationSection section, Set<KitEffect> potionEffects) {
-
-        int i = 0;
-        for (KitEffect effect : potionEffects) {
-            section.set(i + ".effect", effect.getPotionEffectType().getName());
-            section.set(i + ".amplifier", effect.getDuration());
-            section.set(i + ".duration", effect.getDuration() == Integer.MAX_VALUE ? "permanent" : effect.getDuration());
-            i++;
-        }
-    }
-
-    public static Set<KitEffect> getPotionEffects(ConfigurationSection section) {
-        if (section == null) return null;
-
-        HashSet<KitEffect> kitEffects = new HashSet<>();
-
-        for (String key : section.getKeys(false)) {
-            kitEffects.add(new KitEffect(
-                    PotionEffectType.getByName(section.getString(key + ".effect")),
-                    section.getInt(key + ".amplifier"),
-                    section.getString(key + ".duration").equalsIgnoreCase("permanent")
-                            ? Integer.MAX_VALUE : section.getInt(key + ".duration")
-            ));
-        }
-
-        return kitEffects;
     }
 
     private static String getType(ItemStack itemStack) {

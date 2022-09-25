@@ -2,4 +2,9 @@ name: ModernKitPvP
 version: '${project.version}'
 main: me.matzhilven.modernkitpvp.ModernKitPvP
 api-version: 1.18
+depend:
+  - Parties
 authors: [ MatzHilven ]
+commands:
+  kitpvp:
+  duel:

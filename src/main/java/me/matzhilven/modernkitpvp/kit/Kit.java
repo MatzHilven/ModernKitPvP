@@ -46,6 +46,8 @@ public class Kit {
 
     public void apply(Player player) {
 
+        if (player.getInventory().getArmorContents() == armorContents) return;
+
         player.setHealth(player.getHealthScale());
         player.setFoodLevel(20);
         player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));

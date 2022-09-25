@@ -6,6 +6,7 @@ insufficient-funds: "&cYou don't have enough coins to purchase this!"
 
 # Command Usages
 usage: "&aModernKitPvP Usage"
+usage-duel: "&cUsage: /duel <party>"
 
 # Map
 invalid-map: "&cCannot find a map with specified id!"
@@ -14,6 +15,8 @@ created-map: "&aSuccessfully created map `%id%`."
 set-name: "&aSuccessfully set the name of `%id%` to %name%."
 set-spawn: "&aSuccessfully set the spawn of `%id%` to your location."
 set-region: "&aSuccessfully set a corner of `%id%`'s region to your location."
+set-spawn-region: "&aSuccessfully set a corner of the spawn region to your location."
+invalid-map-type: "&cInvalid map type! &6&o(BATTLEFIELD, MATCHMAKING)"
 
 # Kit
 existing-kit: "&cThere already exists a kit with this id!"
@@ -23,3 +26,9 @@ invalid-kit-permissions: "&cYou haven't unlocked this kit yet!"
 selected-kit: "&aSuccessfully selected `%kit%&a`."
 already-unlocked: "&cYou've already unlocked this kit."
 unlocked-kit: "&aSuccessfully bought %kit% &r&afor $%price%."
+
+# Duel
+not-in-party: "&cYOu can only execute this command in a party!"
+invalid-party: "&cCannot find a party with specified name."
+
+kill-streak: "&7%player% &6&lis currently on a &7%kills% &6&lKill Streak!"

@@ -3,7 +3,7 @@ package me.matzhilven.modernkitpvp.map;
 import me.matzhilven.modernkitpvp.utils.Region;
 import org.bukkit.Location;
 
-public class Map {
+public abstract class Map {
 
     private final String id;
     private String name;

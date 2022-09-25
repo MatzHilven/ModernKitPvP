@@ -1,7 +1,7 @@
 package me.matzhilven.modernkitpvp.inventories;
 
-import me.matzhilven.ModernKitPvP.ModernKitPvP;
-import me.matzhilven.ModernKitPvP.utils.StringUtils;
+import me.matzhilven.modernkitpvp.ModernKitPvP;
+import me.matzhilven.modernkitpvp.utils.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

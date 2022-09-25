@@ -3,6 +3,8 @@ package me.matzhilven.modernkitpvp.commands.subcommands.map;
 import me.matzhilven.modernkitpvp.ModernKitPvP;
 import me.matzhilven.modernkitpvp.commands.SubCommand;
 import me.matzhilven.modernkitpvp.map.Map;
+import me.matzhilven.modernkitpvp.map.impl.BattleFieldMap;
+import me.matzhilven.modernkitpvp.map.impl.MatchMakingMap;
 import me.matzhilven.modernkitpvp.utils.StringUtils;
 import org.bukkit.command.CommandSender;
 
@@ -22,8 +24,11 @@ public class CreateMapCommand implements SubCommand {
             StringUtils.sendMessage(sender, main.getMessagesConfig().getString("existing-map"));
             return;
         }
-
-        main.getMapManager().addMap(new Map(id));
+        if (id.equalsIgnoreCase("battlefield")) {
+            main.getMapManager().addMap(new BattleFieldMap(main, id));
+        } else {
+            main.getMapManager().addMap(new MatchMakingMap(main, id));
+        }
 
         StringUtils.sendMessage(sender, main.getMessagesConfig().getString("created-map")
                 .replace("%id%", id)

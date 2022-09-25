@@ -13,37 +13,31 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
-public class MatchMakingMap {
+public class MatchMakingMap extends Map {
 
     private final ModernKitPvP main;
-    private final Map map;
     private final HashMap<UUID, Kit> kits;
     private final HashMap<UUID, Integer> team1;
     private final HashMap<UUID, Integer> team2;
 
-    public MatchMakingMap(ModernKitPvP main, Map map) {
+    public MatchMakingMap(ModernKitPvP main, String id) {
+        super(id);
+
         this.main = main;
-        this.map = map;
 
         this.team1 = new HashMap<>();
         this.team2 = new HashMap<>();
         this.kits = new HashMap<>();
     }
 
-    public String getId() {
-        return map.getId();
-    }
+    public MatchMakingMap(ModernKitPvP main, String id, String name, Location spawnPoint, Region region) {
+        super(id, name, spawnPoint, region);
 
-    public String getName() {
-        return map.getName();
-    }
+        this.main = main;
 
-    public Location getSpawnPoint() {
-        return map.getSpawnPoint();
-    }
-
-    public Region getRegion() {
-        return map.getRegion();
+        this.team1 = new HashMap<>();
+        this.team2 = new HashMap<>();
+        this.kits = new HashMap<>();
     }
 
     public int getKillStreak(UUID uuid) {

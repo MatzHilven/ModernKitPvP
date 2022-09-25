@@ -1,5 +1,6 @@
 package me.matzhilven.modernkitpvp;
 
+import me.matzhilven.modernkitpvp.commands.DuelCommand;
 import me.matzhilven.modernkitpvp.commands.ModernKitPvPBaseCommand;
 import me.matzhilven.modernkitpvp.kit.KitManager;
 import me.matzhilven.modernkitpvp.listeners.InventoryListener;
@@ -22,10 +23,14 @@ public final class ModernKitPvP extends JavaPlugin {
     public void onEnable() {
         saveFiles();
 
+        mapManager = new MapManager(this);
+        kitManager = new KitManager(this);
+
         new PlayerListener(this);
         new InventoryListener(this);
 
         new ModernKitPvPBaseCommand(this);
+        new DuelCommand(this);
     }
 
     @Override
