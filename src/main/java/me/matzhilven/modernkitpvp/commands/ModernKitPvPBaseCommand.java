@@ -1,8 +1,9 @@
 package me.matzhilven.modernkitpvp.commands;
 
 import me.matzhilven.modernkitpvp.ModernKitPvP;
+import me.matzhilven.modernkitpvp.commands.subcommands.duel.LeaveCommand;
 import me.matzhilven.modernkitpvp.commands.subcommands.kit.AddKitCommand;
-import me.matzhilven.modernkitpvp.commands.subcommands.kit.KitsMenuCommand;
+import me.matzhilven.modernkitpvp.commands.subcommands.kit.KitCommand;
 import me.matzhilven.modernkitpvp.commands.subcommands.kit.ReloadKitsCommand;
 import me.matzhilven.modernkitpvp.commands.subcommands.map.*;
 import me.matzhilven.modernkitpvp.utils.StringUtils;
@@ -34,13 +35,16 @@ public class ModernKitPvPBaseCommand implements CommandExecutor, TabExecutor {
         registerSubCommand(new CreateMapCommand(main));
         registerSubCommand(new SetMapNameCommand(main));
         registerSubCommand(new SetMapSpawnCommand(main));
+        registerSubCommand(new SetBattlefieldSpawnCommand(main));
         registerSubCommand(new SetMapRegionCommand(main));
         registerSubCommand(new SetSpawnRegionCommand(main));
 
         // Kit
         registerSubCommand(new AddKitCommand(main));
         registerSubCommand(new ReloadKitsCommand(main));
-        registerSubCommand(new KitsMenuCommand(main));
+        registerSubCommand(new KitCommand(main));
+
+        registerSubCommand(new LeaveCommand(main));
     }
 
     @Override

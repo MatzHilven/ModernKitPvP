@@ -36,10 +36,24 @@ public class SetMapRegionCommand implements SubCommand {
 
         Region region = map.getRegion();
 
+        int num;
+
+        try {
+            num = Integer.parseInt(args[2]);
+        } catch (NumberFormatException e) {
+            StringUtils.sendMessage(sender, main.getMessagesConfig().getString("invalid-number"));
+            return;
+        }
+
+        if (num != 1 && num != 2) {
+            StringUtils.sendMessage(sender, main.getMessagesConfig().getString("invalid-number"));
+            return;
+        }
+
         if (region == null) {
             map.setRegion(Region.of(player.getLocation()));
         } else {
-            region.setCorner(player.getLocation());
+            region.setCorner(num, player.getLocation());
             map.setRegion(region);
         }
 
@@ -57,11 +71,11 @@ public class SetMapRegionCommand implements SubCommand {
 
     @Override
     public String getUsage() {
-        return "<id>";
+        return "<id> <num>";
     }
 
     @Override
     public int getArgumentSize() {
-        return 1;
+        return 2;
     }
 }

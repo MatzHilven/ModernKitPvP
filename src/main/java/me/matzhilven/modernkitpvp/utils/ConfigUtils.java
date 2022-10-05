@@ -22,7 +22,7 @@ public class ConfigUtils {
     }
 
     public static Location getLocation(ConfigurationSection section) {
-        if (section == null) return null;
+        if (section == null || section.getString("world") == null) return null;
 
         return new Location(
                 Bukkit.getWorld(section.getString("world")),
@@ -72,7 +72,8 @@ public class ConfigUtils {
 
     public static void saveArmor(ConfigurationSection section, ItemStack[] armorContents) {
         for (ItemStack itemStack : armorContents) {
-            section.set(getType(itemStack), itemStack);
+            if (itemStack == null) continue;
+            section.set(itemStack.getType().toString(), itemStack);
         }
     }
 
@@ -87,9 +88,5 @@ public class ConfigUtils {
         }
 
         return inventoryContents;
-    }
-
-    private static String getType(ItemStack itemStack) {
-        return itemStack.getType().name().split("_")[1].toLowerCase();
     }
 }

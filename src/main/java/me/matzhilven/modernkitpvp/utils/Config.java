@@ -58,6 +58,10 @@ public class Config {
         return config.getStringList(path);
     }
 
+    public List<Integer> getIntegerList(String path) {
+        return config.getIntegerList(path);
+    }
+
     public void set(String path, Object value) {
         config.set(path, value);
     }

@@ -3,6 +3,7 @@ package me.matzhilven.modernkitpvp.commands.subcommands.map;
 import me.matzhilven.modernkitpvp.ModernKitPvP;
 import me.matzhilven.modernkitpvp.commands.SubCommand;
 import me.matzhilven.modernkitpvp.map.Map;
+import me.matzhilven.modernkitpvp.map.impl.MatchMakingMap;
 import me.matzhilven.modernkitpvp.utils.StringUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,17 +27,38 @@ public class SetMapSpawnCommand implements SubCommand {
 
         Optional<Map> optionalMap = main.getMapManager().getById(id);
 
-        if (!optionalMap.isPresent()) {
+        if (!optionalMap.isPresent() || !(optionalMap.get() instanceof MatchMakingMap)) {
             StringUtils.sendMessage(sender, main.getMessagesConfig().getString("invalid-map"));
             return;
         }
 
-        Map map = optionalMap.get();
-        map.setSpawnPoint(player.getLocation());
+        int num;
+
+        try {
+            num = Integer.parseInt(args[2]);
+        } catch (NumberFormatException e) {
+            StringUtils.sendMessage(sender, main.getMessagesConfig().getString("invalid-number"));
+            return;
+        }
+
+        if (num != 1 && num != 2) {
+            StringUtils.sendMessage(sender, main.getMessagesConfig().getString("invalid-number"));
+            return;
+        }
+
+        MatchMakingMap map = (MatchMakingMap) optionalMap.get();
+
+        if (num == 1) {
+            map.setSpawnPoint1(player.getLocation());
+        } else {
+            map.setSpawnPoint2(player.getLocation());
+        }
+
         main.getMapManager().saveMap(map);
 
-        StringUtils.sendMessage(sender, main.getMessagesConfig().getString("set-spawn")
+        StringUtils.sendMessage(sender, main.getMessagesConfig().getString("set-spawn-match")
                 .replace("%id%", id)
+                .replace("%num%", String.valueOf(num))
         );
     }
 
@@ -47,11 +69,11 @@ public class SetMapSpawnCommand implements SubCommand {
 
     @Override
     public String getUsage() {
-        return "<id>";
+        return "<id> <num>";
     }
 
     @Override
     public int getArgumentSize() {
-        return 1;
+        return 2;
     }
 }

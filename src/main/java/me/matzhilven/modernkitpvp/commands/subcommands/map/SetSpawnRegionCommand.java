@@ -34,10 +34,24 @@ public class SetSpawnRegionCommand implements SubCommand {
 
         Region spawnRegion = map.getSpawnRegion();
 
+        int num;
+
+        try {
+            num = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            StringUtils.sendMessage(sender, main.getMessagesConfig().getString("invalid-number"));
+            return;
+        }
+
+        if (num != 1 && num != 2) {
+            StringUtils.sendMessage(sender, main.getMessagesConfig().getString("invalid-number"));
+            return;
+        }
+
         if (spawnRegion == null) {
             map.setSpawnRegion(Region.of(player.getLocation()));
         } else {
-            spawnRegion.setCorner(player.getLocation());
+            spawnRegion.setCorner(num, player.getLocation());
             map.setSpawnRegion(spawnRegion);
         }
 
@@ -53,11 +67,11 @@ public class SetSpawnRegionCommand implements SubCommand {
 
     @Override
     public String getUsage() {
-        return "";
+        return "<num>";
     }
 
     @Override
     public int getArgumentSize() {
-        return 0;
+        return 1;
     }
 }

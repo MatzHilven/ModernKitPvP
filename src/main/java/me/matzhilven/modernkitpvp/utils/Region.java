@@ -66,19 +66,15 @@ public class Region {
         return x >= getMinX() && x < getMaxX() && y >= getMinY() && y < getMaxY() && z >= getMinZ() && z < getMaxZ();
     }
 
-    public void setCorner(Location location) {
-        if (corner1 == null) {
+    public void setCorner(int corner, Location location) {
+        if (corner == 1) {
             corner1 = location;
-            return;
+        } else {
+            corner2 = location;
         }
-        corner2 = location;
     }
 
-    public Location getRandomLocation(World world) {
-        return world.getHighestBlockAt(
-                        ThreadLocalRandom.current().nextInt(getMinX(), getMaxX()),
-                        ThreadLocalRandom.current().nextInt(getMinZ(), getMaxZ())
-                )
-                .getLocation();
+    public Location getCenter() {
+        return new Location(corner1.getWorld(), getMaxX() - getMinX(), getMaxY() - getMinY(), getMaxZ() - getMinZ());
     }
 }

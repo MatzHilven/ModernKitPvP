@@ -6,7 +6,7 @@ insufficient-funds: "&cYou don't have enough coins to purchase this!"
 
 # Command Usages
 usage: "&aModernKitPvP Usage"
-usage-duel: "&cUsage: /duel <party>"
+usage-duel: "&cUsage: /duel <accept/reject/[party]> <party>"
 
 # Map
 invalid-map: "&cCannot find a map with specified id!"
@@ -14,6 +14,7 @@ existing-map: "&cThere already exists a map with this id!"
 created-map: "&aSuccessfully created map `%id%`."
 set-name: "&aSuccessfully set the name of `%id%` to %name%."
 set-spawn: "&aSuccessfully set the spawn of `%id%` to your location."
+set-spawn-match: "&aSuccessfully set spawn %num% of `%id%` to your location."
 set-region: "&aSuccessfully set a corner of `%id%`'s region to your location."
 set-spawn-region: "&aSuccessfully set a corner of the spawn region to your location."
 invalid-map-type: "&cInvalid map type! &6&o(BATTLEFIELD, MATCHMAKING)"
@@ -28,7 +29,23 @@ already-unlocked: "&cYou've already unlocked this kit."
 unlocked-kit: "&aSuccessfully bought %kit% &r&afor $%price%."
 
 # Duel
-not-in-party: "&cYOu can only execute this command in a party!"
+not-in-party: "&cYuu can only execute this command in a party!"
+not-in-game: "&cYuu can only execute this command in a duel!"
 invalid-party: "&cCannot find a party with specified name."
+invalid-party-self: "&cYou cannot duel your own party!"
+invalid-party-leader: "&cOnly the party leader can execute this command!"
+invalid-target-party-leader: "&cThe leader of that party is not online!"
+invited: "&aSuccessfully invited %party% to a duel."
+invited-target: "&aYour party has been invited to a duel with %party%. Click this message or type &7&o(/duel accept %party%) &r&ato accept."
+not-invited: "&cYour party hasn't been invited by anyone."
+no-available-maps: "&cThere aren't any maps available."
+map-active: "&cThis map had already been chosen by another party!"
+started: "&aGame started."
+
+invite-accepted: "&aSuccessfully accepted %party%'s duel request"
+invite-accepted-target: "&aYour duel request has been accepted by %party%."
+invite-rejected: "&aSuccessfully accepted %party%'s duel request"
 
 kill-streak: "&7%player% &6&lis currently on a &7%kills% &6&lKill Streak!"
+
+win-message: "&aParty %party% has won the duel!"

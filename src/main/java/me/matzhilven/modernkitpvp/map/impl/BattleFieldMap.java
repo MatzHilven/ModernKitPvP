@@ -8,8 +8,8 @@ import me.matzhilven.modernkitpvp.utils.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.nio.Buffer;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,8 +18,10 @@ public class BattleFieldMap extends Map {
     private final ModernKitPvP main;
     private final HashMap<UUID, Kit> kits;
     private final HashMap<UUID, Integer> killStreak;
+    private final HashSet<UUID> activePlayers;
     private final int killStreakAmount;
 
+    private Location spawnPoint;
     private Region spawnRegion;
 
     public BattleFieldMap(ModernKitPvP main, String id) {
@@ -28,16 +30,19 @@ public class BattleFieldMap extends Map {
 
         this.kits = new HashMap<>();
         this.killStreak = new HashMap<>();
+        this.activePlayers = new HashSet<>();
         this.killStreakAmount = main.getConfig().getInt("kill-streak");
     }
 
     public BattleFieldMap(ModernKitPvP main, String id, String name, Location spawnPoint, Region region, Region spawnRegion) {
-        super(id, name, spawnPoint, region);
+        super(id, name, region);
         this.main = main;
         this.spawnRegion = spawnRegion;
+        this.spawnPoint = spawnPoint;
 
         this.kits = new HashMap<>();
         this.killStreak = new HashMap<>();
+        this.activePlayers = new HashSet<>();
         this.killStreakAmount = main.getConfig().getInt("kill-streak");
     }
 
@@ -77,7 +82,12 @@ public class BattleFieldMap extends Map {
     }
 
     public Optional<Kit> getKit(Player player) {
+        activePlayers.add(player.getUniqueId());
         return Optional.ofNullable(kits.get(player.getUniqueId()));
+    }
+
+    public HashSet<UUID> getActivePlayers() {
+        return activePlayers;
     }
 
     public Region getSpawnRegion() {
@@ -90,5 +100,13 @@ public class BattleFieldMap extends Map {
 
     public void removeKit(Player player) {
         kits.remove(player.getUniqueId());
+    }
+
+    public Location getSpawnPoint() {
+        return spawnPoint;
+    }
+
+    public void setSpawnPoint(Location spawnPoint) {
+        this.spawnPoint = spawnPoint;
     }
 }

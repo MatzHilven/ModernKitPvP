@@ -1,10 +1,12 @@
 package me.matzhilven.modernkitpvp.map;
 
+import com.alessiodp.parties.api.interfaces.Party;
 import me.matzhilven.modernkitpvp.ModernKitPvP;
 import me.matzhilven.modernkitpvp.map.impl.BattleFieldMap;
 import me.matzhilven.modernkitpvp.map.impl.MatchMakingMap;
 import me.matzhilven.modernkitpvp.utils.ConfigUtils;
 import me.matzhilven.modernkitpvp.utils.Region;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,17 +15,24 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class MapManager {
 
     private final ModernKitPvP main;
     private final HashMap<String, MatchMakingMap> maps;
+    private final HashMap<UUID, UUID> invites;
+    private final HashMap<UUID, String> chosenMaps;
     private BattleFieldMap battleFieldMap;
 
     public MapManager(ModernKitPvP main) {
         this.main = main;
         this.maps = new HashMap<>();
+        this.invites = new HashMap<>();
+        this.chosenMaps = new HashMap<>();
 
         loadMaps();
     }
@@ -53,7 +62,8 @@ public class MapManager {
                     MatchMakingMap map = new MatchMakingMap(main,
                             yamlConfiguration.getString("id"),
                             yamlConfiguration.getString("name"),
-                            ConfigUtils.getLocation(yamlConfiguration.getConfigurationSection("spawn")),
+                            ConfigUtils.getLocation(yamlConfiguration.getConfigurationSection("spawn-1")),
+                            ConfigUtils.getLocation(yamlConfiguration.getConfigurationSection("spawn-2")),
                             ConfigUtils.getRegion(yamlConfiguration.getConfigurationSection("region"))
                     );
                     maps.put(map.getId(), map);
@@ -131,22 +141,34 @@ public class MapManager {
             yamlConfiguration.set("id", map.getId());
             if (map.getName() != null) yamlConfiguration.set("name", map.getName());
 
-            if (map.getSpawnPoint() != null) {
-                yamlConfiguration.createSection("spawn");
-                ConfigUtils.saveLocation(yamlConfiguration.getConfigurationSection("spawn"), map.getSpawnPoint());
-            }
-
             if (map.getRegion() != null) {
                 yamlConfiguration.createSection("region");
                 ConfigUtils.saveRegion(yamlConfiguration.getConfigurationSection("region"), map.getRegion());
             }
 
             if (map instanceof BattleFieldMap) {
-                Region spawnRegion = ((BattleFieldMap) map).getSpawnRegion();
+                BattleFieldMap battleFieldMap = (BattleFieldMap) map;
+                Region spawnRegion = battleFieldMap.getSpawnRegion();
+
+                if (battleFieldMap.getSpawnPoint() != null) {
+                    yamlConfiguration.createSection("spawn");
+                    ConfigUtils.saveLocation(yamlConfiguration.getConfigurationSection("spawn"), battleFieldMap.getSpawnPoint());
+                }
 
                 if (spawnRegion != null) {
                     yamlConfiguration.createSection("spawn-region");
                     ConfigUtils.saveRegion(yamlConfiguration.getConfigurationSection("spawn-region"), spawnRegion);
+                }
+            } else {
+                MatchMakingMap matchMakingMap = (MatchMakingMap) map;
+
+                if (matchMakingMap.getSpawnPoint1() != null) {
+                    yamlConfiguration.createSection("spawn-1");
+                    ConfigUtils.saveLocation(yamlConfiguration.getConfigurationSection("spawn-1"), matchMakingMap.getSpawnPoint1());
+                }
+                if (matchMakingMap.getSpawnPoint2() != null) {
+                    yamlConfiguration.createSection("spawn-2");
+                    ConfigUtils.saveLocation(yamlConfiguration.getConfigurationSection("spawn-2"), matchMakingMap.getSpawnPoint2());
                 }
             }
 
@@ -157,11 +179,32 @@ public class MapManager {
         }
     }
 
-    public HashMap<String, MatchMakingMap> getMaps() {
-        return maps;
+    public List<MatchMakingMap> getAvailableMaps() {
+        return maps.values().stream().filter(matchMakingMap -> !matchMakingMap.isActive()).collect(Collectors.toList());
+    }
+
+    public Optional<MatchMakingMap> getCurrentGame(Player player) {
+        return maps.values().stream().filter(MatchMakingMap::isActive).filter(map -> map.isIn(player)).findFirst();
     }
 
     public BattleFieldMap getBattleFieldMap() {
         return battleFieldMap;
+    }
+
+    public HashMap<UUID, UUID> getInvites() {
+        return invites;
+    }
+
+
+    public HashMap<UUID, String> getChosenMaps() {
+        return chosenMaps;
+    }
+
+    public void startDuel(Party hostParty, Party party) {
+        Optional<Map> optionalMap = getById(chosenMaps.get(hostParty.getId()));
+        if (!optionalMap.isPresent()) return;
+
+        MatchMakingMap matchMakingMap = (MatchMakingMap) optionalMap.get();
+        matchMakingMap.start(hostParty, party);
     }
 }

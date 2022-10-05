@@ -3,6 +3,7 @@ package me.matzhilven.modernkitpvp.listeners;
 import me.matzhilven.modernkitpvp.ModernKitPvP;
 import me.matzhilven.modernkitpvp.map.Map;
 import me.matzhilven.modernkitpvp.map.impl.BattleFieldMap;
+import me.matzhilven.modernkitpvp.map.impl.MatchMakingMap;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,26 +16,27 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 public class PlayerListener implements Listener {
 
     private final ModernKitPvP main;
     private final Set<UUID> gliding;
-    private final HashMap<UUID, String> latestRegions;
 
     public PlayerListener(ModernKitPvP main) {
         this.main = main;
 
         gliding = new HashSet<>();
-        latestRegions = new HashMap<>();
 
         main.getServer().getPluginManager().registerEvents(this, main);
 
     }
 
     @EventHandler
-    public void onGliding(EntityToggleGlideEvent e) {
+    public void onToggleGlide(EntityToggleGlideEvent e) {
 
         Player player = (Player) e.getEntity();
 
@@ -67,8 +69,9 @@ public class PlayerListener implements Listener {
         player.getInventory().clear();
         player.getInventory().setChestplate(new ItemStack(Material.ELYTRA));
 
-    }
+        main.getKitManager().getById("default").ifPresent(kit -> main.getMapManager().getBattleFieldMap().setKit(player, kit));
 
+    }
 
 
     @EventHandler
@@ -76,7 +79,6 @@ public class PlayerListener implements Listener {
         if (main.getMapManager().getBattleFieldMap() == null) return;
 
         Player player = event.getPlayer();
-        latestRegions.put(player.getUniqueId(), main.getMapManager().getRegionName(player));
 
         event.setRespawnLocation(main.getMapManager().getBattleFieldMap().getSpawnPoint());
         player.getInventory().clear();
@@ -87,7 +89,13 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (main.getMapManager().getBattleFieldMap() == null) return;
-        // todo check if spawn -> clear inv
+        Player player = event.getPlayer();
+
+        if (!"battlefield_spawn".equals(main.getMapManager().getRegionName(player))) return;
+        main.getMapManager().getBattleFieldMap().getActivePlayers().remove(player.getUniqueId());
+
+        player.getInventory().clear();
+        player.getInventory().setChestplate(new ItemStack(Material.ELYTRA));
     }
 
     @EventHandler
@@ -95,6 +103,9 @@ public class PlayerListener implements Listener {
         event.getDrops().clear();
 
         Player player = event.getEntity();
+
+        if ("battlefield".equals(main.getMapManager().getRegionName(player)))
+            main.getMapManager().getBattleFieldMap().getActivePlayers().remove(player.getUniqueId());
 
         if (player.getKiller() != null) {
             Player killer = player.getKiller();
@@ -105,33 +116,41 @@ public class PlayerListener implements Listener {
             }
         }
 
+        Optional<MatchMakingMap> optionalMap = main.getMapManager().getCurrentGame(player);
 
+        if (optionalMap.isPresent()) {
+            MatchMakingMap map = optionalMap.get();
+            if (!map.hasStarted()) return;
 
+            map.onKill(player, player.getKiller());
+        }
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
+        Optional<MatchMakingMap> optionalMap = main.getMapManager().getCurrentGame(player);
+        if (optionalMap.isPresent()) {
+            MatchMakingMap map = optionalMap.get();
+            if (map.hasStarted()) return;
+            if (event.getFrom().getBlockX() == event.getTo().getBlockX()
+                    && event.getFrom().getBlockY() == event.getTo().getBlockY()
+                    && event.getFrom().getBlockZ() == event.getTo().getBlockZ()
+            ) return;
+
+            event.setCancelled(true);
+        }
+
         if (!gliding.contains(player.getUniqueId())) return;
 
-        if (!latestRegions.containsKey(player.getUniqueId())) {
-            latestRegions.put(player.getUniqueId(), main.getMapManager().getRegionName(player));
-            return;
-        }
+        if (!main.getMapManager().getBattleFieldMap().getActivePlayers().contains(player.getUniqueId())) return;
 
         String currentRegion = main.getMapManager().getRegionName(player);
 
-        if (currentRegion == null) {
-            latestRegions.remove(player.getUniqueId());
-            return;
-        }
+        if (currentRegion == null || !currentRegion.equals("battlefield_spawn")) return;
 
-        String latestRegion = latestRegions.get(player.getUniqueId());
-
-        if (!currentRegion.equals(latestRegion) && currentRegion.equals("battlefield_spawn")) {
-            event.setTo(event.getFrom().clone().add(0,-5,0));
-        }
+        event.setTo(event.getFrom().clone().add(0, -5, 0));
 
     }
 }

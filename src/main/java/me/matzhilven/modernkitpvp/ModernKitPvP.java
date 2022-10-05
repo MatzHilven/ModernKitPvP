@@ -1,6 +1,6 @@
 package me.matzhilven.modernkitpvp;
 
-import me.matzhilven.modernkitpvp.commands.DuelCommand;
+import me.matzhilven.modernkitpvp.commands.subcommands.duel.DuelCommand;
 import me.matzhilven.modernkitpvp.commands.ModernKitPvPBaseCommand;
 import me.matzhilven.modernkitpvp.kit.KitManager;
 import me.matzhilven.modernkitpvp.listeners.InventoryListener;

@@ -199,7 +199,7 @@ public class ItemBuilder {
     public ItemBuilder replace(String placeholder, String value) {
         ItemMeta im = is.getItemMeta();
         List<String> lore = im.getLore();
-        im.setLore(lore.stream().map(line -> line = line.replace(placeholder, value)).collect(Collectors.toList()));
+        im.setLore(lore.stream().map(line -> line.replace(placeholder, value)).collect(Collectors.toList()));
         is.setItemMeta(im);
         return this;
     }
@@ -213,8 +213,8 @@ public class ItemBuilder {
     public ItemBuilder replaceAll(String placeholder, String value) {
         ItemMeta im = is.getItemMeta();
         List<String> lore = im.getLore();
-        im.setDisplayName(im.getDisplayName().replace(placeholder, value));
-        im.setLore(lore.stream().map(line -> line = line.replace(placeholder, value)).collect(Collectors.toList()));
+        im.setDisplayName(im.getDisplayName().replace(placeholder, StringUtils.colorize(value)));
+        im.setLore(lore.stream().map(line -> line.replace(placeholder, StringUtils.colorize(value))).collect(Collectors.toList()));
         is.setItemMeta(im);
         return this;
     }

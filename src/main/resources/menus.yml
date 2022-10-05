@@ -6,7 +6,7 @@ kit-selector:
     name: " "
     lore: [ ]
     amount: 1
-    slots: [ 0,1,2,3,4,5,6,7,8,9,18,19,20,21,23,24,25,26 ]
+    slots: [ 0,1,2,3,4,5,6,7,8,9,17,18,19,20,21,23,24,25,26 ]
   items:
     close:
       material: BARRIER
@@ -21,3 +21,26 @@ kit-selector:
     lore-locked:
       - " "
       - "&cYou haven't unlocked this kit yet!"
+
+map-selector:
+  name: "&b&lSelect Map"
+  size: 27
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+    lore: [ ]
+    amount: 1
+    slots: [ 0,1,2,3,4,5,6,7,8,9,18,19,20,21,23,24,25,26 ]
+  items:
+    close:
+      material: BARRIER
+      name: "&4&lClose Menu"
+      lore: [ ]
+      amount: 1
+      slot: 22
+  map-format:
+    material: GRASS
+    name: "%name%"
+    lore:
+      - " "
+      - "&7Click to choose map!"
