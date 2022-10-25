@@ -90,6 +90,16 @@ public class DuelCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
 
+            if (player.isGliding()) {
+                StringUtils.sendMessage(sender, main.getMessagesConfig().getString("gliding"));
+                return true;
+            }
+
+            if (main.isInCombat(player.getUniqueId())) {
+                StringUtils.sendMessage(sender, main.getMessagesConfig().getString("in-combat"));
+                return true;
+            }
+
             main.getMapManager().getInvites().remove(hostParty.getId());
 
             UUID targetUUID = party.getLeader();
@@ -102,7 +112,7 @@ public class DuelCommand implements CommandExecutor, TabCompleter {
 
             if (args[0].equalsIgnoreCase("accept")) {
 
-                main.getMapManager().startDuel(party, hostParty);
+                main.getMapManager().startMatchMaking(party, hostParty);
 
                 StringUtils.sendMessage(player, main.getMessagesConfig().getString("invite-accepted")
                         .replace("%party%", party.getName())

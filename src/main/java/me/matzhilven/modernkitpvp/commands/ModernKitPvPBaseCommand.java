@@ -2,8 +2,10 @@ package me.matzhilven.modernkitpvp.commands;
 
 import me.matzhilven.modernkitpvp.ModernKitPvP;
 import me.matzhilven.modernkitpvp.commands.subcommands.duel.LeaveCommand;
+import me.matzhilven.modernkitpvp.commands.subcommands.duel.LeaveMatchMakingCommand;
 import me.matzhilven.modernkitpvp.commands.subcommands.kit.AddKitCommand;
 import me.matzhilven.modernkitpvp.commands.subcommands.kit.KitCommand;
+import me.matzhilven.modernkitpvp.commands.subcommands.kit.MatchMakingCommand;
 import me.matzhilven.modernkitpvp.commands.subcommands.kit.ReloadKitsCommand;
 import me.matzhilven.modernkitpvp.commands.subcommands.map.*;
 import me.matzhilven.modernkitpvp.utils.StringUtils;
@@ -45,6 +47,9 @@ public class ModernKitPvPBaseCommand implements CommandExecutor, TabExecutor {
         registerSubCommand(new KitCommand(main));
 
         registerSubCommand(new LeaveCommand(main));
+
+        registerSubCommand(new MatchMakingCommand(main));
+        registerSubCommand(new LeaveMatchMakingCommand(main));
     }
 
     @Override

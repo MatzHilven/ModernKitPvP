@@ -1,17 +1,19 @@
-package me.matzhilven.modernkitpvp.commands.subcommands.map;
+package me.matzhilven.modernkitpvp.commands.subcommands.duel;
 
 import me.matzhilven.modernkitpvp.ModernKitPvP;
 import me.matzhilven.modernkitpvp.commands.SubCommand;
-import me.matzhilven.modernkitpvp.map.impl.BattleFieldMap;
+import me.matzhilven.modernkitpvp.map.impl.DuelMap;
 import me.matzhilven.modernkitpvp.utils.StringUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class SetBattlefieldSpawnCommand implements SubCommand {
+import java.util.Optional;
+
+public class LeaveMatchMakingCommand implements SubCommand {
 
     private final ModernKitPvP main;
 
-    public SetBattlefieldSpawnCommand(ModernKitPvP main) {
+    public LeaveMatchMakingCommand(ModernKitPvP main) {
         this.main = main;
     }
 
@@ -20,25 +22,17 @@ public class SetBattlefieldSpawnCommand implements SubCommand {
         if (!(sender instanceof Player)) return;
 
         Player player = (Player) sender;
-
-
-        BattleFieldMap battleFieldMap = main.getMapManager().getBattleFieldMap();
-        battleFieldMap.setSpawnPoint(player.getLocation());
-        main.getMapManager().saveMap(battleFieldMap);
-
-        StringUtils.sendMessage(sender, main.getMessagesConfig().getString("set-spawn")
-                .replace("%id%", battleFieldMap.getId())
-        );
+        main.getMatchMakingManager().removePlayer(player.getUniqueId());
     }
 
     @Override
     public String getName() {
-        return "setbattlefieldspawn";
+        return "leavematchmaking";
     }
 
     @Override
     public String getUsage() {
-        return "";
+        return "leavematchmaking";
     }
 
     @Override

@@ -1,2 +1,14 @@
 kill-streak: 1 # every x kills
   
+countdown: 10
+
+combat-time: 5
+
+queue-time: 1m
+
+minimum-players:
+  ONE_VS_ONE: 2
+  TWO_VS_TWO: 2
+  TREE_VS_TREE: 4
+  FOUR_VS_FOUR: 6
+  EIGHT_VS_EIGHT: 8

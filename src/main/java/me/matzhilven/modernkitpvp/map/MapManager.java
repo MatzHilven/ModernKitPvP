@@ -3,10 +3,10 @@ package me.matzhilven.modernkitpvp.map;
 import com.alessiodp.parties.api.interfaces.Party;
 import me.matzhilven.modernkitpvp.ModernKitPvP;
 import me.matzhilven.modernkitpvp.map.impl.BattleFieldMap;
-import me.matzhilven.modernkitpvp.map.impl.MatchMakingMap;
+import me.matzhilven.modernkitpvp.map.impl.DuelMap;
+import me.matzhilven.modernkitpvp.matchmaking.MatchMakingType;
 import me.matzhilven.modernkitpvp.utils.ConfigUtils;
 import me.matzhilven.modernkitpvp.utils.Region;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class MapManager {
 
     private final ModernKitPvP main;
-    private final HashMap<String, MatchMakingMap> maps;
+    private final HashMap<String, DuelMap> maps;
     private final HashMap<UUID, UUID> invites;
     private final HashMap<UUID, String> chosenMaps;
     private BattleFieldMap battleFieldMap;
@@ -59,13 +59,17 @@ public class MapManager {
                             ConfigUtils.getRegion(yamlConfiguration.getConfigurationSection("spawn-region"))
                     );
                 } else {
-                    MatchMakingMap map = new MatchMakingMap(main,
+                    DuelMap map = new DuelMap(main,
                             yamlConfiguration.getString("id"),
                             yamlConfiguration.getString("name"),
                             ConfigUtils.getLocation(yamlConfiguration.getConfigurationSection("spawn-1")),
                             ConfigUtils.getLocation(yamlConfiguration.getConfigurationSection("spawn-2")),
-                            ConfigUtils.getRegion(yamlConfiguration.getConfigurationSection("region"))
-                    );
+                            ConfigUtils.getRegion(yamlConfiguration.getConfigurationSection("region")),
+                            yamlConfiguration.getStringList("supported-types")
+                                    .stream()
+                                    .map(MatchMakingType::valueOf)
+                                    .collect(Collectors.toList()),
+                            yamlConfiguration.getString("author"));
                     maps.put(map.getId(), map);
                 }
 
@@ -79,7 +83,7 @@ public class MapManager {
         if (map instanceof BattleFieldMap) {
             battleFieldMap = (BattleFieldMap) map;
         } else {
-            maps.put(map.getId(), (MatchMakingMap) map);
+            maps.put(map.getId(), (DuelMap) map);
         }
         saveMap(map);
     }
@@ -103,7 +107,7 @@ public class MapManager {
     public String getRegionName(Player player) {
         Location location = player.getLocation();
 
-        Optional<MatchMakingMap> optionalMap = maps.values().stream().filter(map -> map.getRegion() != null)
+        Optional<DuelMap> optionalMap = maps.values().stream().filter(map -> map.getRegion() != null)
                 .filter(map -> map.getRegion().contains(location))
                 .findFirst();
 
@@ -160,16 +164,23 @@ public class MapManager {
                     ConfigUtils.saveRegion(yamlConfiguration.getConfigurationSection("spawn-region"), spawnRegion);
                 }
             } else {
-                MatchMakingMap matchMakingMap = (MatchMakingMap) map;
+                DuelMap duelMap = (DuelMap) map;
 
-                if (matchMakingMap.getSpawnPoint1() != null) {
+                if (duelMap.getSpawnPoint1() != null) {
                     yamlConfiguration.createSection("spawn-1");
-                    ConfigUtils.saveLocation(yamlConfiguration.getConfigurationSection("spawn-1"), matchMakingMap.getSpawnPoint1());
+                    ConfigUtils.saveLocation(yamlConfiguration.getConfigurationSection("spawn-1"), duelMap.getSpawnPoint1());
                 }
-                if (matchMakingMap.getSpawnPoint2() != null) {
+                if (duelMap.getSpawnPoint2() != null) {
                     yamlConfiguration.createSection("spawn-2");
-                    ConfigUtils.saveLocation(yamlConfiguration.getConfigurationSection("spawn-2"), matchMakingMap.getSpawnPoint2());
+                    ConfigUtils.saveLocation(yamlConfiguration.getConfigurationSection("spawn-2"), duelMap.getSpawnPoint2());
                 }
+
+                yamlConfiguration.set("author", duelMap.getAuthor());
+
+                yamlConfiguration.set("supported-types", duelMap.getSupportedTypes()
+                        .stream()
+                        .map(MatchMakingType::toString)
+                        .collect(Collectors.toList()));
             }
 
             yamlConfiguration.save(file);
@@ -179,12 +190,19 @@ public class MapManager {
         }
     }
 
-    public List<MatchMakingMap> getAvailableMaps() {
+    public List<DuelMap> getAvailableMaps() {
         return maps.values().stream().filter(matchMakingMap -> !matchMakingMap.isActive()).collect(Collectors.toList());
     }
 
-    public Optional<MatchMakingMap> getCurrentGame(Player player) {
-        return maps.values().stream().filter(MatchMakingMap::isActive).filter(map -> map.isIn(player)).findFirst();
+    public Optional<DuelMap> getAvailableMap(MatchMakingType type) {
+        return maps.values().stream()
+                .filter(matchMakingMap -> !matchMakingMap.isActive())
+                .filter(matchMakingMap -> matchMakingMap.getSupportedTypes().contains(type))
+                .findFirst();
+    }
+
+    public Optional<DuelMap> getCurrentGame(Player player) {
+        return maps.values().stream().filter(DuelMap::isActive).filter(map -> map.isIn(player)).findFirst();
     }
 
     public BattleFieldMap getBattleFieldMap() {
@@ -200,11 +218,15 @@ public class MapManager {
         return chosenMaps;
     }
 
-    public void startDuel(Party hostParty, Party party) {
+    public void startMatchMaking(Party hostParty, Party party) {
         Optional<Map> optionalMap = getById(chosenMaps.get(hostParty.getId()));
         if (!optionalMap.isPresent()) return;
 
-        MatchMakingMap matchMakingMap = (MatchMakingMap) optionalMap.get();
-        matchMakingMap.start(hostParty, party);
+        DuelMap duelMap = (DuelMap) optionalMap.get();
+        duelMap.start(hostParty, party);
+    }
+
+    public void startDuel(DuelMap map, List<UUID> players) {
+        map.start(players);
     }
 }

@@ -44,3 +44,51 @@ map-selector:
     lore:
       - " "
       - "&7Click to choose map!"
+
+
+matchmaking-selector:
+  name: "&b&lSelect Matchmaking Type"
+  size: 27
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+    lore: [ ]
+    amount: 1
+    slots: [ 0,1,2,3,4,5,6,7,8,9,10,16,17,18,19,20,21,23,24,25,26 ]
+  items:
+    1v1:
+      material: OAK_SIGN
+      name: "&e&l1v1"
+      lore: [ ]
+      amount: 1
+      slot: 11
+    2v2:
+      material: OAK_SIGN
+      name: "&e&l2v2"
+      lore: [ ]
+      amount: 1
+      slot: 12
+    3v3:
+      material: OAK_SIGN
+      name: "&e&l3v3"
+      lore: [ ]
+      amount: 1
+      slot: 13
+    4v4:
+      material: OAK_SIGN
+      name: "&e&l4v4"
+      lore: [ ]
+      amount: 1
+      slot: 14
+    8v8:
+      material: OAK_SIGN
+      name: "&e&l8v8"
+      lore: [ ]
+      amount: 1
+      slot: 15
+    close:
+      material: BARRIER
+      name: "&4&lClose Menu"
+      lore: [ ]
+      amount: 1
+      slot: 22

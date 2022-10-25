@@ -3,7 +3,7 @@ package me.matzhilven.modernkitpvp.inventories.impl;
 import com.alessiodp.parties.api.interfaces.Party;
 import me.matzhilven.modernkitpvp.inventories.Menu;
 import me.matzhilven.modernkitpvp.map.Map;
-import me.matzhilven.modernkitpvp.map.impl.MatchMakingMap;
+import me.matzhilven.modernkitpvp.map.impl.DuelMap;
 import me.matzhilven.modernkitpvp.utils.ItemBuilder;
 import me.matzhilven.modernkitpvp.utils.StringUtils;
 import org.bukkit.Material;
@@ -50,7 +50,7 @@ public class MapSelectorMenu extends Menu {
 
         if (!optionalMap.isPresent()) return;
 
-        MatchMakingMap map = (MatchMakingMap) optionalMap.get();
+        DuelMap map = (DuelMap) optionalMap.get();
 
         if (map.isActive()) {
             StringUtils.sendMessage(player, main.getMessagesConfig().getString("map-active"));
@@ -96,7 +96,7 @@ public class MapSelectorMenu extends Menu {
         List<String> lore = main.getMenusConfig().getStringList("map-selector.map-format.lore");
 
 
-        for (MatchMakingMap map : main.getMapManager().getAvailableMaps()) {
+        for (DuelMap map : main.getMapManager().getAvailableMaps()) {
             int slot = inventory.firstEmpty();
 
             inventory.addItem(new ItemBuilder(material)

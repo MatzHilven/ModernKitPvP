@@ -3,7 +3,7 @@ package me.matzhilven.modernkitpvp.commands.subcommands.map;
 import me.matzhilven.modernkitpvp.ModernKitPvP;
 import me.matzhilven.modernkitpvp.commands.SubCommand;
 import me.matzhilven.modernkitpvp.map.Map;
-import me.matzhilven.modernkitpvp.map.impl.MatchMakingMap;
+import me.matzhilven.modernkitpvp.map.impl.DuelMap;
 import me.matzhilven.modernkitpvp.utils.StringUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,7 +27,7 @@ public class SetMapSpawnCommand implements SubCommand {
 
         Optional<Map> optionalMap = main.getMapManager().getById(id);
 
-        if (!optionalMap.isPresent() || !(optionalMap.get() instanceof MatchMakingMap)) {
+        if (!optionalMap.isPresent() || !(optionalMap.get() instanceof DuelMap)) {
             StringUtils.sendMessage(sender, main.getMessagesConfig().getString("invalid-map"));
             return;
         }
@@ -46,7 +46,7 @@ public class SetMapSpawnCommand implements SubCommand {
             return;
         }
 
-        MatchMakingMap map = (MatchMakingMap) optionalMap.get();
+        DuelMap map = (DuelMap) optionalMap.get();
 
         if (num == 1) {
             map.setSpawnPoint1(player.getLocation());

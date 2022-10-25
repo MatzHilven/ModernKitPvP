@@ -3,7 +3,7 @@ package me.matzhilven.modernkitpvp.inventories.impl;
 import me.matzhilven.modernkitpvp.inventories.Menu;
 import me.matzhilven.modernkitpvp.kit.Kit;
 import me.matzhilven.modernkitpvp.map.MapType;
-import me.matzhilven.modernkitpvp.map.impl.MatchMakingMap;
+import me.matzhilven.modernkitpvp.map.impl.DuelMap;
 import me.matzhilven.modernkitpvp.utils.ItemBuilder;
 import me.matzhilven.modernkitpvp.utils.StringUtils;
 import org.bukkit.Bukkit;
@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
-import java.nio.Buffer;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,7 +58,7 @@ public class KitSelectorMenu extends Menu {
         if (mapType == MapType.BATTLEFIELD) {
             if (main.getMapManager().getBattleFieldMap() != null) main.getMapManager().getBattleFieldMap().setKit(player, kit);
         } else {
-            Optional<MatchMakingMap> optionalGame = main.getMapManager().getCurrentGame(player);
+            Optional<DuelMap> optionalGame = main.getMapManager().getCurrentGame(player);
             if (!optionalGame.isPresent()) return;
             optionalGame.get().chooseKit();
             kit.apply(player);

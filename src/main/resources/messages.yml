@@ -31,6 +31,8 @@ unlocked-kit: "&aSuccessfully bought %kit% &r&afor $%price%."
 # Duel
 not-in-party: "&cYuu can only execute this command in a party!"
 not-in-game: "&cYuu can only execute this command in a duel!"
+gliding: "&cYou cannot execute this command while gliding!"
+in-combat: "&cYou cannot execute this command while in combat!"
 invalid-party: "&cCannot find a party with specified name."
 invalid-party-self: "&cYou cannot duel your own party!"
 invalid-party-leader: "&cOnly the party leader can execute this command!"
@@ -41,6 +43,7 @@ not-invited: "&cYour party hasn't been invited by anyone."
 no-available-maps: "&cThere aren't any maps available."
 map-active: "&cThis map had already been chosen by another party!"
 started: "&aGame started."
+countdown: "&7&lGame starting in %seconds% seconds."
 
 invite-accepted: "&aSuccessfully accepted %party%'s duel request"
 invite-accepted-target: "&aYour duel request has been accepted by %party%."
@@ -48,4 +51,15 @@ invite-rejected: "&aSuccessfully accepted %party%'s duel request"
 
 kill-streak: "&7%player% &6&lis currently on a &7%kills% &6&lKill Streak!"
 
-win-message: "&aParty %party% has won the duel!"
+win-message-party: "&aParty %party% has won the duel!"
+win-message: "&aTeam %team% has won the duel!"
+
+
+# Matchmaking
+added: "&aYou've been added to the %type% &rmatchmaking!"
+added-party: "&aYour party has been added to the %type% &rmatchmaking!"
+reminder: "&aYou're still in the %type% &rmatchmaking! Execute /kitpvp leavematchmaking to leave the queue."
+
+
+title: "&aWelcome to &r%map%"
+subtitle: "&7Made by &e%author%"

@@ -53,6 +53,8 @@ public class BattleFieldMap extends Map {
     public void onKill(Player player, Player killer) {
         removeKillStreak(player);
 
+        if (killer == null) return;
+
         int currentKillStreak = calculateKillStreak(killer);
         if (currentKillStreak % killStreakAmount == 0) {
             StringUtils.broadCast(main.getMessagesConfig().getString("kill-streak")
@@ -96,10 +98,6 @@ public class BattleFieldMap extends Map {
 
     public void setSpawnRegion(Region spawnRegion) {
         this.spawnRegion = spawnRegion;
-    }
-
-    public void removeKit(Player player) {
-        kits.remove(player.getUniqueId());
     }
 
     public Location getSpawnPoint() {

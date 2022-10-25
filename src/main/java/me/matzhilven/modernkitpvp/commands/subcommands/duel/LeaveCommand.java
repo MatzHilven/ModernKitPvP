@@ -2,7 +2,7 @@ package me.matzhilven.modernkitpvp.commands.subcommands.duel;
 
 import me.matzhilven.modernkitpvp.ModernKitPvP;
 import me.matzhilven.modernkitpvp.commands.SubCommand;
-import me.matzhilven.modernkitpvp.map.impl.MatchMakingMap;
+import me.matzhilven.modernkitpvp.map.impl.DuelMap;
 import me.matzhilven.modernkitpvp.utils.StringUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,14 +23,14 @@ public class LeaveCommand implements SubCommand {
 
         Player player = (Player) sender;
 
-        Optional<MatchMakingMap> optionalMap = main.getMapManager().getCurrentGame(player);
+        Optional<DuelMap> optionalMap = main.getMapManager().getCurrentGame(player);
 
         if (!optionalMap.isPresent()) {
             StringUtils.sendMessage(player, main.getMessagesConfig().getString("not-in-game"));
             return;
         }
 
-        MatchMakingMap map = optionalMap.get();
+        DuelMap map = optionalMap.get();
         map.leave(player, false);
 
     }
